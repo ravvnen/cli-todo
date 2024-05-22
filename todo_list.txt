@@ -1,18 +1,1 @@
-[
-  {
-    "id": 1,
-    "description": "test 2"
-  },
-  {
-    "id": 2,
-    "description": "test 2"
-  },
-  {
-    "id": 3,
-    "description": "test 3"
-  },
-  {
-    "id": 6,
-    "description": "opsig dtu medlemskab"
-  }
-]
+[]

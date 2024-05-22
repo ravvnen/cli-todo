@@ -1,7 +1,6 @@
 use std::io::Read;
 use std::io::Write;
 use std::fs::OpenOptions;
-use std::fs::File;
 use serde_json;
 use serde::{Serialize, Deserialize};
 
@@ -24,6 +23,8 @@ impl Task {
     // pub fn complete(&mut self) {
     //     self.completed = true;
     // }
+
+    
 }
 
 pub fn load_tasks() -> Vec<Task> {
@@ -94,4 +95,22 @@ pub fn delete_task(id: usize) {
     data_file.write_all(serialized_tasks.as_bytes()).expect("Unable to write file");
 
     println!("Task {} deleted", id)
+}
+
+pub fn delete_tasks() {
+    let mut tasks = load_tasks();
+    tasks.clear();
+
+    let serialized_tasks = serde_json::to_string_pretty(&tasks).expect("Unable to serialize tasks");
+
+    let mut data_file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open("todo_list.txt")
+        .expect("Unable to open file");
+
+    data_file.write_all(serialized_tasks.as_bytes()).expect("Unable to write file");
+
+    println!("All tasks deleted");
 }

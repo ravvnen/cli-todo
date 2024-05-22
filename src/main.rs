@@ -3,6 +3,8 @@ mod task;
 use dotenv::dotenv;
 use task::{add_task, list_tasks, delete_task};
 
+use crate::task::delete_tasks;
+
 fn main() {
     dotenv().ok();
     let args: Vec<String> = std::env::args().collect();
@@ -42,14 +44,17 @@ fn main() {
                 eprintln!("Usage: {} del <task_id>", args[0]);
                 return;
             }
-            let task_id = args[2].clone();
-            println!("Task id: {}", task_id);
 
-            if task_id == ""{
-                eprintln!("Task ID cannot be empty");
-                return;
+            let description = args[2].clone();
+            println!(": {}", description);
+
+            if description == "all"{
+                delete_tasks();
             }
-            delete_task(task_id.parse().unwrap());
+            else {
+                delete_task(description.parse().unwrap());
+            
+            }
         },    
 
         "list" => list_tasks(),
