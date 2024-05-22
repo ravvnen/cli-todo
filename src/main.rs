@@ -1,16 +1,7 @@
 mod task;
 
 use dotenv::dotenv;
-use std::fs;
-use std::fs::File;
-//use serde::{Deserialize, Serialize};
-use std::env;
-use std::io::Read;
-use std::io::Write;
-use std::env::args;
-use std::fs::OpenOptions;
-
-
+use task::{add_task, list_tasks, delete_task};
 
 fn main() {
     dotenv().ok();
@@ -26,7 +17,6 @@ fn main() {
     }   
 
     let command = &args[1];
-    println!("Command: {}", command);
 
     match command.as_str() {
         "add" => 
@@ -46,42 +36,25 @@ fn main() {
             
             
         },
+        "del" => 
+        {
+            if args.len() < 3 {
+                eprintln!("Usage: {} del <task_id>", args[0]);
+                return;
+            }
+            let task_id = args[2].clone();
+            println!("Task id: {}", task_id);
+
+            if task_id == ""{
+                eprintln!("Task ID cannot be empty");
+                return;
+            }
+            delete_task(task_id.parse().unwrap());
+        },    
+
         "list" => list_tasks(),
         _ => eprintln!("Unknown command: {}", command),
     }
-}
-
-pub fn add_task(description: String) {
-
-    // Open a file in write mode
-    let mut data_file = OpenOptions::new()
-        .write(true)
-        .append(true)
-        .create(true)
-        .open("todo_list.txt")
-        .expect("Unable to create file");
-
-    // Add a new line to the file
-    data_file.write(b"\n").expect("Unable to write data");
-
-    // Write a string to the file
-    data_file.write(description.as_bytes()).expect("Unable to write data");
-
-    println!("Task added: {}", description);
-}
-
-fn list_tasks() {
-    // Read a file in the local file system
-    let mut data_file = OpenOptions::new()
-        .read(true)
-        .open("todo_list.txt")
-        .expect("Unable to open file");
-
-    // Read the file contents into a string
-    let mut contents = String::new();
-
-    data_file.read_to_string(&mut contents).unwrap();
-    println!("Tasks: {}", contents);
 }
 
 
